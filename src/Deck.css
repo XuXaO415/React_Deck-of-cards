@@ -1,0 +1,17 @@
+.Deck {
+    text-align: center;
+    font-size: 'Roboto', 'sans-serif';
+}
+
+.Deck-cardarea {
+    margin-top: 80px;
+}
+
+.draw-card {
+    padding: 15px;
+    background-color: black;
+    color: white;
+    border-radius: 8px;
+    border: none;
+    margin: 0 10px;
+}
