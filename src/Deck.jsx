@@ -1,6 +1,7 @@
 import React, {useState, useEffect, useRef} from "react";
 import axios from "axios";
 import Card from "./Card";
+import "./Card"
 
 
 const Base_URL= 'https://deckofcardsapi.com/api/deck';
@@ -54,7 +55,7 @@ const Deck = () => {
     const toggle = (e) => {
         setAutoDraw(isAuto => !isAuto);
     };
-    const cards = newCard.map(c => (
+    const cards = draw.map(c => (
         <Card key={c.id} name={c.name} image={c.image} />
     ))
 
@@ -62,7 +63,7 @@ const Deck = () => {
     return (
         <div>
             <button onClick={toggle}>
-                {autoDraw ? "Start Drawing" : "Stop Drawing"} GIMME A CARD!
+                {autoDraw ? "Start Drawing" : "Stop Drawing"}
             </button>
         </div>
     )
