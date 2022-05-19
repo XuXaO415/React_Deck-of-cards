@@ -5,10 +5,14 @@ import Card from "./Card";
 
 const Base_URL= 'https://deckofcardsapi.com/api/deck';
 
+
 const Deck = () => {
     const [deck, setDeck] = useState(null);
     const[draw, setDraw] = useState([]);
     const[newCard, setNewCard] = useState(true);
+    const timerId  = useRef(null);
+    const [card, setCard] = useState(0);
+    const [autoDraw, setAutoDraw] = useState(false);
 
     useEffect(() => {
         async function fetchData() {
@@ -17,7 +21,51 @@ const Deck = () => {
         }
         fetchData();
     }, [setDeck]);
- 
+
+    useEffect(() => {
+        async function drawCard() {
+            let deck_id = deck;
+            const drawRes = await axios.get(`${Base_URL}/${deck_id}/draw/`);
+            if(drawRes.data.remaining === 0) {
+                setNewCard(false);
+                alert("Error: no cards remaining!");
+            }
+            const card = drawRes.data.cards[0];
+            setDraw(apiRes => [...apiRes,
+                {
+                    id:card.code,
+                    name: card.suit + " " + card.value,
+                    image: card.image
+                }
+            ]);
+        }
+    });
+    useEffect(() => {
+        console.log("DRAWING CARD...");
+        timerId.current = setInterval(() => {
+            setCard(c => c + 1);
+        }, 1000);
+        return function clearTimer() {
+            console.log("Unmount deck", timerId.current);
+            clearInterval(timerId.current);
+        };
+    }, [timerId, deck]);
+
+    const toggle = (e) => {
+        setAutoDraw(isAuto => !isAuto);
+    };
+    const cards = newCard.map(c => (
+        <Card key={c.id} name={c.name} image={c.image} />
+    ))
+
+
+    return (
+        <div>
+            <button onClick={toggle}>
+                {autoDraw ? "Start Drawing" : "Stop Drawing"} GIMME A CARD!
+            </button>
+        </div>
+    )
 
 
 }
